@@ -1,0 +1,63 @@
+## vivo-embed - Magyar Embedding Indexer Agent
+## Port: 7272 | ChromaDB | Google Gemini embedding-001
+
+google:
+  api_key_env: GOOGLE_API_KEY
+  model: gemini-embedding-001
+  dimensions: 3072
+  batch_size: 20
+  task_type_doc: RETRIEVAL_DOCUMENT
+  task_type_query: RETRIEVAL_QUERY
+
+chroma:
+  persist_path: C:\AI\data\vivo-embed\chroma
+  collections:
+    - docs
+    - code
+    - notes
+    - system
+    - web
+
+crawler:
+  scan_drives: auto
+  exclude_dirs:
+    - Windows
+    - "$Recycle.Bin"
+    - "System Volume Information"
+    - "Program Files"
+    - "Program Files (x86)"
+    - .git
+    - node_modules
+    - __pycache__
+    - .venv
+    - venv
+    - .cache
+    - AppData\Local\Temp
+    - AppData\Local\Microsoft
+    - AppData\Roaming\Microsoft
+  priority_paths:
+    - C:\AI
+    - C:\Users\istva\Dev
+  extensions:
+    docs: [.pdf, .docx, .doc, .txt, .rtf]
+    code: [.py, .ts, .js, .ps1, .bat, .sh, .rs, .go, .cs]
+    notes: [.md, .markdown, .org, .rst]
+    system: [.yaml, .yml, .json, .toml, .ini, .conf]
+  max_file_size_mb: 50
+  min_file_size_bytes: 100
+
+chunker:
+  chunk_size: 512
+  chunk_overlap: 64
+
+api:
+  host: 0.0.0.0
+  port: 7272
+
+mcp:
+  transport: stdio
+  server_name: vivo-embed
+
+schedule:
+  daily_reindex_hour: 3
+  incremental_interval_minutes: 60

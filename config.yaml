@@ -1,5 +1,14 @@
 ## vivo-embed - Magyar Embedding Indexer Agent
-## Port: 7272 | ChromaDB | Google Gemini embedding-001
+## Port: 7272 | ChromaDB | Ollama bge-m3 (lokalis, nincs quota)
+## AKTIV EMBEDDER: ollama
+
+embedder: ollama
+
+ollama:
+  base_url: http://localhost:11434
+  model: bge-m3
+  dimensions: 1024
+  batch_size: 50
 
 google:
   api_key_env: GOOGLE_API_KEY
@@ -19,7 +28,7 @@ chroma:
     - web
 
 crawler:
-  scan_drives: auto
+  scan_drives: none
   exclude_dirs:
     - Windows
     - "$Recycle.Bin"
@@ -31,19 +40,34 @@ crawler:
     - __pycache__
     - .venv
     - venv
+    - env
     - .cache
     - AppData\Local\Temp
     - AppData\Local\Microsoft
     - AppData\Roaming\Microsoft
+    - site-packages
+    - dist-info
+    - dist
+    - build
+    - .next
+    - .nuxt
   priority_paths:
-    - C:\AI
-    - C:\Users\istva\Dev
+    - C:\AI\readme
+    - C:\AI\AI-Memory-Hub
+    - C:\AI\docs
+    - C:\AI\npu
+    - C:\AI\apps\control-center
+    - C:\AI\apps\vivo-embed\src
+    - C:\AI\Claude-Coder-Config
+    - C:\Users\istva\free-claude-code
+    - C:\Users\istva\AppData\Local\hermes
+    - C:\AI\AI-hub
   extensions:
     docs: [.pdf, .docx, .doc, .txt, .rtf]
     code: [.py, .ts, .js, .ps1, .bat, .sh, .rs, .go, .cs]
     notes: [.md, .markdown, .org, .rst]
     system: [.yaml, .yml, .json, .toml, .ini, .conf]
-  max_file_size_mb: 50
+  max_file_size_mb: 5
   min_file_size_bytes: 100
 
 chunker:

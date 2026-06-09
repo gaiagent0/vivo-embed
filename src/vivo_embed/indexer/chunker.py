@@ -1,13 +1,13 @@
-"""Magyar-tudatos szoveg chunker — fix regex, Python re kompatibilis"""
+"""Magyar-tudatos szoveg chunker"""
 from __future__ import annotations
 import re
 from typing import List
 
 _ABBREVS = {
-    "dr", "mr", "mrs", "ms", "prof", "jr", "sr",
-    "stb", "kb", "ill", "pl", "db", "szerk", "ford",
-    "kiad", "ua", "uo", "i.e", "i.sz", "u.n", "vs",
-    "tel", "fax", "sz", "nr", "no", "max", "min",
+    "dr","mr","mrs","ms","prof","jr","sr",
+    "stb","kb","ill","pl","db","szerk","ford",
+    "kiad","ua","uo","i.e","i.sz","u.n","vs",
+    "tel","fax","sz","nr","no","max","min",
 }
 
 def chunk_text(text: str, chunk_size: int = 512, overlap: int = 64) -> List[str]:
@@ -35,13 +35,11 @@ def chunk_text(text: str, chunk_size: int = 512, overlap: int = 64) -> List[str]
             chunks.append(tail)
     return [c for c in chunks if len(c) > 20]
 
-
 def _clean(text: str) -> str:
     text = re.sub(r'\r\n', '\n', text)
     text = re.sub(r'\n{3,}', '\n\n', text)
     text = re.sub(r'[ \t]+', ' ', text)
     return text.strip()
-
 
 def _split_sentences(text: str) -> List[str]:
     paragraphs = re.split(r'\n{2,}', text)
@@ -49,7 +47,6 @@ def _split_sentences(text: str) -> List[str]:
     for para in paragraphs:
         sentences.extend(_split_para(para))
     return [s.strip() for s in sentences if s.strip()]
-
 
 def _split_para(text: str) -> List[str]:
     tokens = re.split(r'(\s+)', text)
@@ -62,9 +59,9 @@ def _split_para(text: str) -> List[str]:
                 continue
             next_real = next((t for t in tokens[i+1:] if t.strip()), "")
             if next_real and next_real[0].isupper():
-                sentences_chunk = "".join(current).strip()
-                if sentences_chunk:
-                    result.append(sentences_chunk)
+                chunk = "".join(current).strip()
+                if chunk:
+                    result.append(chunk)
                 current = []
     if current:
         tail = "".join(current).strip()
@@ -77,7 +74,6 @@ def _split_para(text: str) -> List[str]:
         else:
             final.append(chunk)
     return final
-
 
 def _split_by_length(text: str, max_len: int) -> List[str]:
     parts, start = [], 0
